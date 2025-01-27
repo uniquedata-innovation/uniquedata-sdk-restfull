@@ -13,6 +13,14 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
   
+  <distributionManagement>
+   <repository>
+     <id>github</id>
+     <name>GitHub OWNER Apache Maven Packages</name>
+     <url>https://maven.pkg.github.com/uniquedata-innovation/uniquedata-restfull-sdk</url>
+   </repository>
+ </distributionManagement>
+  
   <dependencies>
   
 		<dependency>

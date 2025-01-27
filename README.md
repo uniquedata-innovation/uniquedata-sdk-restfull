@@ -1,6 +1,5 @@
-# UniqueDataRestFullClient Framework
-
-&#x20;[]&#x20;
+# UniqueDataRestFullClient Framework 
+**by UniqueData Innovation**
 
 ---
 
