@@ -1,88 +1,123 @@
-# UniqueDataRestFullClient Framework 
-**by UniqueData Innovation**
+Below is the **English version** of your README with the same structure and code snippets.
 
 ---
 
-> **Simplifique suas requisições HTTP com autenticação automática e interceptores poderosos.**
+# UniqueDataRestFullClient Framework
 
-O **UniqueDataRestFullClient** é um framework inspirado no Feign, criado para agilizar o desenvolvimento de integrações HTTP em projetos Java. Ele oferece autenticação automática via tokens Bearer, interceptores configuráveis e opções avançadas de manipulação de requisição. Além disso, é totalmente orientado a objetos, permitindo que parâmetros e form-data sejam passados como objetos, sem necessidade de mapear manualmente cada campo.
-
----
-
-## Sumário
-
-1. [Principais Recursos](#principais-recursos)
-2. [Instalação](#instalação)
-   - [Dependência Maven](#dependência-maven)
-   - [Requisitos de Sistema](#requisitos-de-sistema)
-3. [Uso com Spring Boot](#uso-com-spring-boot)
-   - [Exemplo de Configuração](#exemplo-de-configuração)
-4. [Uso Sem Spring Boot](#uso-sem-spring-boot)
-   - [Exemplo de Uso](#exemplo-de-uso)
-5. [Autenticação Automática](#autenticação-automática)
-   - [Bearer Token](#bearer-token)
-   - [Bearer com Form-data](#bearer-com-form-data)
-   - [Sem Autenticação](#sem-autenticação)
-6. [Interceptors](#interceptors)
-   - [Exemplo Avançado](#exemplo-avançado)
-7. [Requisições HTTP](#requisições-http)
-   - [Exemplo de Get/Post/Delete](#exemplo-de-getpostdelete)
-8. [Passando Objetos como Parâmetros](#passando-objetos-como-parâmetros)
-9. [Personalização de Credenciais](#personalização-de-credenciais)
-10. [Contribuições](#contribuições)
-11. [Licença](#licença)
+> **by UniqueData Innovation company from Brazil**
 
 ---
 
-## Principais Recursos
+> **Simplify your HTTP requests with automatic authentication and powerful interceptors.**
 
-- **Autenticação Automática**: Utilize anotações para configurar tokens Bearer e gerenciar expiração.
-- **Interceptors Avançados**: Injete cabeçalhos adicionais e gerencie o envio de tokens sem duplicação de código.
-- **Auto Recover**: Opção de armazenamento em disco do token, permitindo recuperação de sessão mesmo após reinício da aplicação.
-- **Multiplicidade de Formatos**: Suporte para JSON, form-data, x-www-form-urlencoded e mais.
-- **Anotações Simples e Poderosas**: Defina rapidamente endpoints com `@UniqueDataRestFullGet`, `@UniqueDataRestFullPost`, etc.
-- **Orientado a Objetos**: Os parâmetros das requisições podem ser passados como objetos, simplificando ainda mais a integração.
+**UniqueDataRestFullClient** is a Java framework inspired by Feign, designed to speed up the development of HTTP integrations in Java projects. It provides automatic Bearer token authentication, configurable interceptors, and advanced request handling features. In addition, it is fully object-oriented, allowing you to pass parameters and form-data as objects, without the need to manually map each field.
 
 ---
 
-## Instalação
+## Table of Contents
 
-### Dependência Maven
+1. [Key Features](#key-features)  
+2. [Installation](#installation)  
+   - [Maven Dependency](#maven-dependency)  
+   - [System Requirements](#system-requirements)  
+3. [Using with Spring Boot](#using-with-spring-boot)  
+   - [Configuration Example](#configuration-example)  
+4. [Using Without Spring Boot](#using-without-spring-boot)  
+   - [Usage Example](#usage-example)  
+5. [Automatic Authentication](#automatic-authentication)  
+   - [Bearer Token](#bearer-token)  
+   - [Bearer with Form-Data](#bearer-with-form-data)  
+   - [No Authentication](#no
+
+Below is the **English version** of your README with the same structure and code snippets.
+
+---
+
+# UniqueDataRestFullClient Framework
+
+> **by UniqueData Innovation company from Brazil**
+
+---
+
+> **Simplify your HTTP requests with automatic authentication and powerful interceptors.**
+
+**UniqueDataRestFullClient** is a Java framework inspired by Feign, designed to speed up the development of HTTP integrations in Java projects. It provides automatic Bearer token authentication, configurable interceptors, and advanced request handling features. In addition, it is fully object-oriented, allowing you to pass parameters and form-data as objects, without the need to manually map each field.
+
+---
+
+## Table of Contents
+
+1. [Key Features](#key-features)  
+2. [Installation](#installation)  
+   - [Maven Dependency](#maven-dependency)  
+   - [System Requirements](#system-requirements)  
+3. [Using with Spring Boot](#using-with-spring-boot)  
+   - [Configuration Example](#configuration-example)  
+4. [Using Without Spring Boot](#using-without-spring-boot)  
+   - [Usage Example](#usage-example)  
+5. [Automatic Authentication](#automatic-authentication)  
+   - [Bearer Token](#bearer-token)  
+   - [Bearer with Form-data](#bearer-with-form-data)  
+   - [No Authentication](#no-authentication)  
+6. [Interceptors](#interceptors)  
+   - [Advanced Example](#advanced-example)  
+7. [HTTP Requests](#http-requests)  
+   - [Example of Get/Post/Delete](#example-of-getpostdelete)  
+8. [Passing Objects as Parameters](#passing-objects-as-parameters)  
+9. [Credentials Customization](#credentials-customization)  
+10. [Contributions](#contributions)  
+11. [License](#license)
+
+---
+
+## Key Features
+
+- **Automatic Authentication**: Use annotations to configure Bearer tokens and manage expiration.  
+- **Advanced Interceptors**: Inject additional headers and manage token flow without duplicating code.  
+- **Auto Recover**: Option to store the token on disk, allowing session recovery even after application restarts.  
+- **Multiple Formats**: Supports JSON, form-data, x-www-form-urlencoded, and more.  
+- **Simple Yet Powerful Annotations**: Quickly define endpoints with `@UniqueDataRestFullGet`, `@UniqueDataRestFullPost`, etc.  
+- **Object-Oriented**: Request parameters can be passed as objects, further simplifying integration.
+
+---
+
+## Installation
+
+### Maven Dependency
 
 ```xml
 <dependency>
-    <groupId>com.unique.data</groupId>
-    <artifactId>unique-data-restfull-client</artifactId>
-    <version>1.0.0</version>
+  <groupId>br.com.uniquedata-restfull-sdk</groupId>
+  <artifactId>uniquedata-restfull-sdk</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
 
-### Requisitos de Sistema
-
-- Java 17 ou superior.
+### System Requirements
+- Java 17 or higher.
 
 ---
 
-## Uso com Spring Boot
+## Using with Spring Boot
 
-### Exemplo de Configuração
+### Configuration Example
 
-Se o seu projeto utiliza Spring Boot, basta fazer o *scan* do framework em sua classe principal, para que as interfaces anotadas sejam detectadas:
+If your project uses Spring Boot, simply **scan** the framework in your main application class so that annotated interfaces will be detected:
 
 ```java
 @SpringBootApplication
 public class Application {
     public static void main(final String[] args) {
-        // Scaneia as classes anotadas e gera as implementações automaticamente
+        // Scans the annotated classes and generates implementations automatically
         UniqueDataRestFull.scan(Application.class);
 
-        // Inicia a aplicação Spring Boot
+        // Starts the Spring Boot application
         SpringApplication.run(Application.class, args);
     }
 }
 ```
 
-Depois, você pode injetar a interface diretamente via `@Autowired` em um componente Spring:
+Then, you can inject the interface via `@Autowired` in a Spring component:
 
 ```java
 @Component
@@ -93,7 +128,7 @@ public class MyComponent implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Agora você pode chamar diretamente os métodos do seu client
+        // Now you can directly call the methods of your client
         TestResponseBodyDto response = exampleApi.save(new TestRequestBodyDto("Olá", 123));
         System.out.println(response);
     }
@@ -102,19 +137,19 @@ public class MyComponent implements CommandLineRunner {
 
 ---
 
-## Uso Sem Spring Boot
+## Using Without Spring Boot
 
-### Exemplo de Uso
+### Usage Example
 
-Caso não utilize Spring Boot, simplesmente recupere a instância do client chamando:
+If you do not use Spring Boot, simply retrieve the client instance by calling:
 
 ```java
 public class Main {
     public static void main(String[] args) {
-        // Retorna uma implementação da interface ExampleApi
+        // Returns an implementation of the ExampleApi interface
         ExampleApi exampleApi = UniqueDataRestFull.getApi(ExampleApi.class);
 
-        // Uso direto
+        // Direct usage
         TestResponseBodyDto response = exampleApi.save(new TestRequestBodyDto("Olá", 123));
         System.out.println(response);
     }
@@ -123,54 +158,54 @@ public class Main {
 
 ---
 
-## Autenticação Automática
+## Automatic Authentication
 
 ### Bearer Token
 
-A anotação `@AutoAuthentication` permite configurar como o token será obtido e reutilizado. Você pode controlar:
+The `@AutoAuthentication` annotation lets you configure how the token is obtained and reused. You can control:
 
-- **autoRecover**: Se `true`, o token é armazenado em disco.
-- **type**: Tipo de autenticação (ex.: `AuthType.BEARER_TOKEN`).
-- **authenticate**: Detalhes de como o token é obtido (URL, classe de credencial, etc.).
-- **interception**: Configurações do interceptor para injetar cabeçalhos e gerenciar expirações.
+- **autoRecover**: If `true`, the token is stored on disk.  
+- **type**: Authentication type (e.g., `AuthType.BEARER_TOKEN`).  
+- **authenticate**: Details on how to obtain the token (URL, credential class, etc.).  
+- **interception**: Configurations for interceptors to inject headers and manage expiration.
 
-Exemplo completo:
+Complete example:
 
 ```java
 @AutoAuthentication(
-    // Se ativado, o token será persistido em disco e recuperado automaticamente
+    // If enabled, the token is persisted on disk and automatically recovered
     autoRecover = true,
-    // Tipo de autenticação, no caso Bearer
+    // Authentication type, in this case Bearer
     type = AuthType.BEARER_TOKEN,
-    // Configuração da autenticação
+    // Authentication configuration
     authenticate = @Authentication(
-        // Habilita ou não a autenticação
+        // Enable or disable authentication
         enabled = true,
-        // Endereço completo para obter o token
+        // Full URL to retrieve the token
         fullUrlAuth = "https://localhost:9095/autorizy",
-        // Variável de ambiente que contém as credenciais em formato JSON
+        // Environment variable containing the credentials in JSON format
         credentialJsonEnvironmentVariable = "MY_CREDENTIAL_ENV",
-        // Classe onde as credenciais serão mapeadas
+        // Class where credentials will be mapped
         typeClassCredential = CredencialDto.class,
-        // Cabeçalhos adicionais para a requisição de autenticação
+        // Additional headers for the authentication request
         additionalHeaders = {
             @AdditionalHeader(headerName = "teste", headerValue = "auth")
         }
     ),
-    // Configura o interceptor
+    // Interceptor configuration
     interception = @Interception(
-        // Ativa o interceptor para injetar automaticamente o Bearer token nas requisições
+        // Enables the interceptor to automatically inject the Bearer token in requests
         enabled = true,
-        // Tempo de expiração do token (em ms). Se "@ExpireDate" não estiver na classe de credencial
+        // Token expiration time in ms. If `@ExpireDate` is not used in the credential class
         expireInMilliseconds = 60_000
     )
 )
 public interface AutoAuthencatedTestApi {
-    // Seus métodos de API protegidos por autenticação...
+    // Your protected API methods...
 }
 ```
 
-### Bearer com Form-data
+### Bearer with Form-data
 
 ```java
 @AutoAuthentication(
@@ -198,7 +233,7 @@ public interface AutoAuthencatedTestApi {
 public interface AutoAuthFormDataApi {}
 ```
 
-### Sem Autenticação
+### No Authentication
 
 ```java
 @AutoAuthentication(
@@ -220,13 +255,13 @@ public interface AutoAuthFixedTokenApi {}
 
 ## Interceptors
 
-### Exemplo Avançado
+### Advanced Example
 
-Os interceptors (configurados via `@Interception`) atuam de forma automática injetando cabeçalhos e gerenciando a expiração do token. Algumas vantagens:
+Interceptors (configured via `@Interception`) automatically inject headers and manage token expiration. Some advantages:
 
-- **Adicionar cabeçalhos customizados**: `@AdditionalHeader` permite adicionar qualquer informação no header de cada requisição.
-- **Gerenciar expiração**: Se sua credencial não tiver a anotação `@ExpireDate`, use `expireInMilliseconds` para forçar a renovação após determinado período.
-- **Desativar facilmente**: Defina `enabled = false` para não usar o interceptor.
+- **Add Custom Headers**: `@AdditionalHeader` lets you add any information to the header of each request.  
+- **Manage Expiration**: If your credential class does not have the `@ExpireDate` annotation, use `expireInMilliseconds` to force token renewal after a certain period.  
+- **Easily Disable**: Set `enabled = false` if you want to disable the interceptor.
 
 ```java
 @Interception(
@@ -241,25 +276,25 @@ Os interceptors (configurados via `@Interception`) atuam de forma automática in
 
 ---
 
-## Requisições HTTP
+## HTTP Requests
 
-### Exemplo de Get/Post/Delete
+### Example of Get/Post/Delete
 
-Para fazer requisições, basta anotar métodos dentro de uma interface marcada com `@UniqueDataRestFullClient`. Você pode utilizar:
+To make HTTP requests, annotate methods inside an interface marked with `@UniqueDataRestFullClient`. You can use:
 
 - `@UniqueDataRestFullGet`
 - `@UniqueDataRestFullPost`
 - `@UniqueDataRestFullPut`
 - `@UniqueDataRestFullPatch`
 - `@UniqueDataRestFullDelete`
-- `@UniqueDataRestFull` (caso precise de métodos customizados ou verbos diferentes)
+- `@UniqueDataRestFull` (for custom methods or different HTTP verbs)
 
-**Exemplo**:
+**Example**:
 
 ```java
 @UniqueDataRestFullClient(
-    baseUrl = "https://backend.api.com", // Base URL da API
-    autoAuthEndpointMonitor = AutoAuthFixedTokenApi.class // Monitor de autenticação
+    baseUrl = "https://backend.api.com", // Base URL of the API
+    autoAuthEndpointMonitor = AutoAuthFixedTokenApi.class // Authentication monitor
 )
 public interface ExampleApi {
 
@@ -269,15 +304,15 @@ public interface ExampleApi {
         @RestFullParam("limit") int limit
     );
 
-    // Exemplo GET com Path Variable
+    // Example GET with Path Variable
     @UniqueDataRestFullGet(value = "/v3/jobs/{uid}")
     TesteDataDto checkJobId2(@RestFullPathVar("uid") String uid);
 
-    // Exemplo POST com Body
+    // Example POST with Body
     @UniqueDataRestFullPost("/")
     TestResponseBodyDto save(@RestFullBody TestRequestBodyDto requestBody);
 
-    // Exemplo DELETE
+    // Example DELETE
     @UniqueDataRestFullDelete("/{id}")
     TestResponseBodyDto deleteById(@RestFullPathVar("id") String id);
 }
@@ -285,27 +320,27 @@ public interface ExampleApi {
 
 ---
 
-## Passando Objetos como Parâmetros
+## Passing Objects as Parameters
 
-O framework também permite mapear parâmetros de URL, form-data ou x-www-form-urlencoded a partir de **objetos**. Por exemplo, se você tiver um DTO assim:
+The framework also allows you to map URL parameters, form-data, or x-www-form-urlencoded from **objects**. For example, if you have a DTO like this:
 
 ```java
 public class Teste {
     private String nome;
     private Integer idade;
 
-    // getters e setters
+    // getters and setters
 }
 ```
 
-Basta anotar o método com `@RestFullParamToObject` ou `@RestFullFormDataToObject` (dependendo do seu caso de uso), e o framework montará a requisição. Exemplo:
+Simply annotate the method with `@RestFullParamToObject` or `@RestFullFormDataToObject` (depending on your use case), and the framework will assemble the request. For example:
 
 ```java
 @UniqueDataRestFullGet("/filters")
 TestResponseBodyDto filtersByObject(@RestFullParamToObject Teste filtros);
 ```
 
-Isto resultará em uma URL como `...?nome=valorDoNome&idade=valorDaIdade`. Já em casos de form-data, bastaria utilizar:
+This will result in a URL like `...?nome=nomeValue&idade=idadeValue`. For form-data cases, just use:
 
 ```java
 @UniqueDataRestFull(
@@ -318,13 +353,13 @@ TestResponseBodyDto saveByUrlEncoded(@RestFullFormDataToObject Teste requestBody
 
 ---
 
-## Personalização de Credenciais
+## Credentials Customization
 
-- **@Bearer**: Para o campo que representa o token na classe de credencial (por exemplo, `private String token;`).
-- **@ExpireDate**: Para o campo que representa a data/hora de expiração do token (por exemplo, `private Instant expireTime;`). Se este campo não for anotado, utilize `expireInMilliseconds` no `@Interception` para forçar nova autenticação.
-- **autoRecover**: Se `true`, o token será salvo em disco. Caso a aplicação seja reiniciada, o framework lerá a última credencial salva.
+- **@Bearer**: For the field that represents the token in the credential class (e.g., `private String token;`).  
+- **@ExpireDate**: For the field that represents the token’s expiration date/time (e.g., `private Instant expireTime;`). If this field is not annotated, use `expireInMilliseconds` in `@Interception` to force re-authentication.  
+- **autoRecover**: If `true`, the token is saved to disk. If the application restarts, the framework will read the last saved credential.
 
-Exemplo de classe de credencial:
+Example of a credential class:
 
 ```java
 public class CredencialDto {
@@ -334,19 +369,12 @@ public class CredencialDto {
     @ExpireDate
     private LocalDateTime expiresAt;
 
-    // Getters e Setters
+    // Getters and Setters
 }
 ```
 
 ---
 
-## Contribuições
+## License
 
-Ficaremos felizes em receber contribuições! Sinta-se à vontade para abrir issues ou pull requests. Consulte [CONTRIBUTING.md](CONTRIBUTING.md) para mais informações sobre nosso fluxo de desenvolvimento.
-
----
-
-## Licença
-
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para detalhes.
-
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
