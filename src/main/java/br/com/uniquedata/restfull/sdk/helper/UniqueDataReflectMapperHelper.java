@@ -21,7 +21,7 @@ import br.com.uniquedata.restfull.sdk.pojo.ReflectMapperField;
 import br.com.uniquedata.restfull.sdk.pojo.ReflectMapperFilter;
 
 public class UniqueDataReflectMapperHelper {
-	
+
 	private AtomicReference<Object> objectInReference;
 	
 	private AtomicReference<ReflectMapperFilter> reflectMapperFilterReference;

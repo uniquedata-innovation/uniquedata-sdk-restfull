@@ -165,14 +165,15 @@ public class UniqueDataRestFullWebClientBuild {
 		}	
 	}
 	
-	private Function<ClientResponse, Mono<?>> exchangeToMonoBuild(final Class<?> responseType){
-		return clientResponse -> clientResponse.bodyToMono(String.class)
-			.map(requestBody -> toResponse(clientResponse, requestBody, responseType))
-			.defaultIfEmpty(toResponse(clientResponse));
+	private <T> Function<ClientResponse, Mono<UniqueDataRestFullResponse<T>>> exchangeToMonoBuild(final Class<T> responseType) {
+	    return clientResponse -> clientResponse.bodyToMono(String.class)
+	    	.map(requestBody -> toResponse(clientResponse, requestBody, responseType))
+	    	.defaultIfEmpty(toResponse(clientResponse));
 	}
 	
-	private UniqueDataRestFullResponse<?> toResponse(final ClientResponse clientResponse, 
-			final Object requestBody, final Class<?> responseType){
+	@SuppressWarnings("unchecked")
+	private <T> UniqueDataRestFullResponse<T> toResponse(final ClientResponse clientResponse, 
+			final Object requestBody, final Class<T> responseType){
 		
 		final HttpStatus status = (HttpStatus) clientResponse.statusCode();
 		
@@ -187,10 +188,10 @@ public class UniqueDataRestFullWebClientBuild {
         
         if(UniqueDataJacksonConfigBuild.canParseOrThrow((String) requestBody, responseType)) {
         	final Object responseObject = UniqueDataJacksonConfigBuild.from((String) requestBody, responseType);
-        	return new UniqueDataRestFullResponse<>(responseObject, responseHeaders, responseHttpStatus);
+        	return (UniqueDataRestFullResponse<T>) new UniqueDataRestFullResponse<>(responseObject, responseHeaders, responseHttpStatus);
     	}
         
-		return new UniqueDataRestFullResponse<>((String) requestBody, responseHeaders, responseHttpStatus);
+		return (UniqueDataRestFullResponse<T>) new UniqueDataRestFullResponse<String>((String) requestBody, responseHeaders, responseHttpStatus);
 	}
 	
 	private <T> UniqueDataRestFullResponse<T> toResponse(final ClientResponse clientResponse){

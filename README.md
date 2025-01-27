@@ -22,46 +22,14 @@
    - [Usage Example](#usage-example)  
 5. [Automatic Authentication](#automatic-authentication)  
    - [Bearer Token](#bearer-token)  
-   - [Bearer with Form-Data](#bearer-with-form-data)  
-   - [No Authentication](#no
-
-Below is the **English version** of your README with the same structure and code snippets.
-
----
-
-# UniqueDataRestFullClient Framework
-
-> **by UniqueData Innovation company from Brazil**
-
----
-
-> **Simplify your HTTP requests with automatic authentication and powerful interceptors.**
-
-**UniqueDataRestFullClient** is a Java framework inspired by Feign, designed to speed up the development of HTTP integrations in Java projects. It provides automatic Bearer token authentication, configurable interceptors, and advanced request handling features. In addition, it is fully object-oriented, allowing you to pass parameters and form-data as objects, without the need to manually map each field.
-
----
-
-## Table of Contents
-
-1. [Key Features](#key-features)  
-2. [Installation](#installation)  
-   - [Maven Dependency](#maven-dependency)  
-   - [System Requirements](#system-requirements)  
-3. [Using with Spring Boot](#using-with-spring-boot)  
-   - [Configuration Example](#configuration-example)  
-4. [Using Without Spring Boot](#using-without-spring-boot)  
-   - [Usage Example](#usage-example)  
-5. [Automatic Authentication](#automatic-authentication)  
-   - [Bearer Token](#bearer-token)  
    - [Bearer with Form-data](#bearer-with-form-data)  
    - [No Authentication](#no-authentication)  
 6. [Interceptors](#interceptors)  
    - [Advanced Example](#advanced-example)  
-7. [HTTP Requests](#http-requests)  
-   - [Example of Get/Post/Delete](#example-of-getpostdelete)  
+7. [HTTP Requests](#http-requests)
+   - [Example of GET/POST/DELETE](#example-of-get-post-delete)  
 8. [Passing Objects as Parameters](#passing-objects-as-parameters)  
-9. [Credentials Customization](#credentials-customization)  
-10. [Contributions](#contributions)  
+9. [Credentials Customization](#credentials-customization)
 11. [License](#license)
 
 ---
@@ -274,7 +242,8 @@ Interceptors (configured via `@Interception`) automatically inject headers and m
 
 ## HTTP Requests
 
-### Example of Get/Post/Delete
+
+### Example of GET/POST/DELETE
 
 To make HTTP requests, annotate methods inside an interface marked with `@UniqueDataRestFullClient`. You can use:
 
@@ -374,3 +343,5 @@ public class CredencialDto {
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
