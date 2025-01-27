@@ -1,7 +1,3 @@
-Below is the **English version** of your README with the same structure and code snippets.
-
----
-
 # UniqueDataRestFullClient Framework
 
 > **by UniqueData Innovation company from Brazil**
