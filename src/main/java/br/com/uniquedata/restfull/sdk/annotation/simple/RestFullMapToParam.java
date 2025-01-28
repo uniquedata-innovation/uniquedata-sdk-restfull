@@ -14,12 +14,12 @@ import java.lang.annotation.Target;
  * <p> Exemple:
  *
  * <pre>
-Map<String, Object> atributeFormData = ...;
+Map<String, Object> atributeParameters = ...;
 atributeFormData.put("first","JADER");
-atributeFormData.put("last","BERTI");
+atributeFormData.put("last","DEV");
 
-"@UniqueDataRestGet(endpoint = "/paramters",accept)
-public TestResponseBodyDto get(@RestFullFormDataToMap final Map<String, Object> paramters);"
+"@UniqueDataRestGet(endpoint = "/parameters",accept)
+public TestResponseBodyDto get(@RestFullMapToParam final Map<String, Object> parameters);"
 
 build to > /paramters?first=JADER&last=BERTI
  </pre>
@@ -28,13 +28,13 @@ build to > /paramters?first=JADER&last=BERTI
  * @author Unique Data Inovatation (company)
  * @since 1.0
  * @see RestFullBody
- * @see RestFullParamToObject
+ * @see RestFullObjectToParam
  * @see RestFullFormData
- * @see RestFullFormDataToObject
+ * @see RestFullObjectToFormData
  *
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RestFullParamToMap {
+public @interface RestFullMapToParam {
 
 }

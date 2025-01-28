@@ -8,13 +8,25 @@ import java.lang.annotation.Target;
 
 /**
  * 
- * Annotation indicating a method parameter should be bound to the body of the web request.
+ * Annotation indicates that you can create an object with the map atribute form data.
  * 
  * <p>Supported for annotated handler methods.
+ * 
+ * <p> Example:
+ *
+ * <pre>
+Map<String, Object> atributeFormData = ...;
+atributeFormData.put("fist","JADER");
+atributeFormData.put("last","BERTI");
+
+"@UniqueDataRestPost(endpoint = "/",accept = RestFullMediaType.APPLICATION_X_WWW_FORM_URLENCODED)
+public TestResponseBodyDto save(@RestFullMapToFormData final Map<String, Object> formaDataMa);"	
+ </pre>
  * 
  * @author Jaderson Berti
  * @author Unique Data Inovatation (company)
  * @since 1.0
+ * @see RestFullBody
  * @see RestFullObjectToParam
  * @see RestFullMapToParam
  * @see RestFullFormData
@@ -24,6 +36,6 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RestFullBody {
+public @interface RestFullMapToFormData {
 
 }

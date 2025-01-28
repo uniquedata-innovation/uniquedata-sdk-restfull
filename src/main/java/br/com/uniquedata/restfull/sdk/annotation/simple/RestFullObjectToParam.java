@@ -1,6 +1,5 @@
 package br.com.uniquedata.restfull.sdk.annotation.simple;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -8,36 +7,35 @@ import java.lang.annotation.Target;
 
 /**
  * 
- * Annotation indicates that you can create an object with the Object atribute form data.
+ * Annotation indicates that you can create an object with the url parameter fields.
  * 
  * <p>Supported for annotated handler methods.
  * 
- * <p> Exemple:
+ * <p>Example of URL https://dominio.com.br/endpoint/filters?name=jader&text=dev&complex_name=jb
  *
+ * <p> Example of Object
  * <pre>
-public class TestRequestParamToObjetoDto {
+public class TestRequestObjectToParamDto {
   private String name;
   private String text;
   @RestFullField("complex_name")
   private String complexName;
 }
-
-"@UniqueDataRestPost(endpoint = "/",accept = RestFullMediaType.APPLICATION_X_WWW_FORM_URLENCODED)
-public TestResponseBodyDto save(@RestFullFormDataToObject final TestRequestParamToObjetoDto object);"	
+"@UniqueDataRestGet("/filters")
+public TestResponseBodyDto filters(@RestFullObjectToParam final TestRequestObjectToParamDto object);"	
  </pre>
  * 
  * @author Jaderson Berti
  * @author Unique Data Inovatation (company)
  * @since 1.0
  * @see RestFullBody
- * @see RestFullParamToObject
- * @see RestFullParamToMap
+ * @see RestFullMapToParam
  * @see RestFullFormData
+ * @see RestFullObjectToFormData
  *
  */
-@Documented
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RestFullFormDataToObject {
+public @interface RestFullObjectToParam {
 
 }

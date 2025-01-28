@@ -8,34 +8,36 @@ import java.lang.annotation.Target;
 
 /**
  * 
- * Annotation indicates that you can create an object with the map atribute form data.
+ * Annotation indicates that you can create an object with the Object atribute form data.
  * 
  * <p>Supported for annotated handler methods.
  * 
- * <p> Exemple:
+ * <p> Example:
  *
  * <pre>
-Map<String, Object> atributeFormData = ...;
-atributeFormData.put("fist","JADER");
-atributeFormData.put("last","BERTI");
+public class TestRequestObjectToFormDataDto {
+  private String name;
+  private String text;
+  @RestFullField("complex_name")
+  private String complexName;
+}
 
 "@UniqueDataRestPost(endpoint = "/",accept = RestFullMediaType.APPLICATION_X_WWW_FORM_URLENCODED)
-public TestResponseBodyDto save(@RestFullFormDataToMap final Map<String, Object> formaDataMa);"	
+public TestResponseBodyDto save(@RestFullObjectToFormData final TestRequestObjectToFormDataDto object);"	
  </pre>
  * 
  * @author Jaderson Berti
  * @author Unique Data Inovatation (company)
  * @since 1.0
  * @see RestFullBody
- * @see RestFullParamToObject
- * @see RestFullParamToMap
+ * @see RestFullObjectToParam
+ * @see RestFullMapToParam
  * @see RestFullFormData
- * @see RestFullFormDataToObject
  *
  */
 @Documented
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RestFullFormDataToMap {
+public @interface RestFullObjectToFormData {
 
 }

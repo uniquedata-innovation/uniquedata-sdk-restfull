@@ -14,10 +14,11 @@ import org.slf4j.LoggerFactory;
 import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullBody;
 import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullField;
 import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullFormData;
-import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullFormDataToMap;
-import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullFormDataToObject;
+import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullMapToFormData;
+import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullMapToParam;
+import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullObjectToFormData;
+import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullObjectToParam;
 import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullParam;
-import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullParamToObject;
 import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullPathVar;
 import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFull;
 import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFull.RestFullMediaType;
@@ -103,12 +104,13 @@ public class UniqueDataRestFullBuiderBeanInvocationHandler implements Invocation
 		endpoint = formatEndpointUrl(endpoint);
 		endpoint = buildRestFullParam(endpoint, requestSettings.get(RestFullParam.class));
 		endpoint = buildRestFullPathVar(endpoint, requestSettings.get(RestFullPathVar.class));
-		endpoint = buildRestFullParamBody(endpoint, requestSettings.get(RestFullParamToObject.class));
+		endpoint = buildRestFullObjectToParam(endpoint, requestSettings.get(RestFullObjectToParam.class));
+		endpoint = buildRestFullMapToParam(endpoint, requestSettings.get(RestFullMapToParam.class));
 		
 		String restFullFormData = new String();
 		restFullFormData = buildRestFullFormData(restFullFormData, requestSettings.get(RestFullFormData.class));
-		restFullFormData = buildRestFullFormDataToObject(restFullFormData, requestSettings.get(RestFullFormDataToObject.class));
-		restFullFormData = buildRestFullFormDataToMap(restFullFormData, requestSettings.get(RestFullFormDataToMap.class));
+		restFullFormData = buildRestFullObjectToFormData(restFullFormData, requestSettings.get(RestFullObjectToFormData.class));
+		restFullFormData = buildRestFullMapToFormData(restFullFormData, requestSettings.get(RestFullMapToFormData.class));
 		
 		final Map<String, Object> restFullBody = requestSettings.get(RestFullBody.class);
 		final Type genericReturnType = method.getGenericReturnType() != null ? method.getGenericReturnType() : Void.class;
@@ -155,9 +157,9 @@ public class UniqueDataRestFullBuiderBeanInvocationHandler implements Invocation
 		return restFullFormDataQuery;
 	}
 	
-	private String buildRestFullParamBody(String endpoint, final Map<String, Object> restFullParamBody) {
+	private String buildRestFullObjectToParam(String endpoint, final Map<String, Object> restFullParamBody) {
 		if(!restFullParamBody.isEmpty()) {
-			final Object object = restFullParamBody.get(RestFullParamToObject.class.getName());
+			final Object object = restFullParamBody.get(RestFullObjectToParam.class.getName());
 			final Map<String, Object> parameters = ObjectReflectionHelper.getFieldNameAndValue(object, RestFullField.class);
 			
 			for (final Entry<String, Object> parameter : parameters.entrySet()) {
@@ -172,9 +174,21 @@ public class UniqueDataRestFullBuiderBeanInvocationHandler implements Invocation
 		return endpoint;
 	}
 	
-	private String buildRestFullFormDataToObject(String buildingFormData, final Map<String, Object> restFullFormDataToObject) {
+	private String buildRestFullMapToParam(String endpoint, final Map<String, Object> restFullMapToParam) {
+		for (final Entry<String, Object> parameter : restFullMapToParam.entrySet()) {
+			if(endpoint.contains("?")) {
+				endpoint = String.format("%s&%s=%s", endpoint, parameter.getKey(), parameter.getValue());
+			}else {
+				endpoint = String.format("%s?%s=%s", endpoint, parameter.getKey(), parameter.getValue());
+			}
+		}
+		
+		return endpoint;
+	}
+	
+	private String buildRestFullObjectToFormData(String buildingFormData, final Map<String, Object> restFullFormDataToObject) {
 		if(!restFullFormDataToObject.isEmpty()) {
-			final Object object = restFullFormDataToObject.get(RestFullFormDataToObject.class.getName());
+			final Object object = restFullFormDataToObject.get(RestFullObjectToFormData.class.getName());
 			final Map<String, Object> parameters = ObjectReflectionHelper.getFieldNameAndValue(object, RestFullField.class);
 			
 			for (final Entry<String, Object> parameter : parameters.entrySet()) {
@@ -189,7 +203,7 @@ public class UniqueDataRestFullBuiderBeanInvocationHandler implements Invocation
 		return buildingFormData;
 	}
 	
-	private String buildRestFullFormDataToMap(String buildingFormData, final Map<String, Object> restFullFormDataToMap) {
+	private String buildRestFullMapToFormData(String buildingFormData, final Map<String, Object> restFullFormDataToMap) {
 		for (final Entry<String, Object> parameter : restFullFormDataToMap.entrySet()) {
 			if(buildingFormData == null || buildingFormData.isEmpty()) {
 				buildingFormData += String.format("%s=%s", parameter.getKey(), parameter.getValue());
@@ -215,15 +229,16 @@ public class UniqueDataRestFullBuiderBeanInvocationHandler implements Invocation
 		requestSettings.put(RestFullBody.class, requestBody);
 		
 		final Map<String, Object> requestParamBody = new HashMap<>();
-		requestSettings.put(RestFullParamToObject.class, requestParamBody);
+		requestSettings.put(RestFullObjectToParam.class, requestParamBody);
 		
 		final Map<String, Object> requestFormData = new HashMap<>();
 		requestSettings.put(RestFullFormData.class, requestFormData);
 		
 		final Map<String, Object> requestFormDataToObject = new HashMap<>();
-		requestSettings.put(RestFullFormDataToObject.class, requestFormDataToObject);
+		requestSettings.put(RestFullObjectToFormData.class, requestFormDataToObject);
 		
-		requestSettings.put(RestFullFormDataToMap.class, new HashMap<>());
+		requestSettings.put(RestFullMapToParam.class, new HashMap<>());
+		requestSettings.put(RestFullMapToFormData.class, new HashMap<>());
 		
 		for (int i = 0; i < parameters.length; i++) {
 			final Object object = args[i];
@@ -248,16 +263,16 @@ public class UniqueDataRestFullBuiderBeanInvocationHandler implements Invocation
 				requestBody.put(RestFullBody.class.getName(), object);
 			}
 			
-			if(parameter.isAnnotationPresent(RestFullParamToObject.class)) {
-				requestParamBody.put(RestFullParamToObject.class.getName(), object);
+			if(parameter.isAnnotationPresent(RestFullObjectToParam.class)) {
+				requestParamBody.put(RestFullObjectToParam.class.getName(), object);
 			}
 			
-			if(parameter.isAnnotationPresent(RestFullFormDataToObject.class)) {
-				requestFormDataToObject.put(RestFullFormDataToObject.class.getName(), object);
+			if(parameter.isAnnotationPresent(RestFullObjectToFormData.class)) {
+				requestFormDataToObject.put(RestFullObjectToFormData.class.getName(), object);
 			}
 			
-			if(parameter.isAnnotationPresent(RestFullFormDataToMap.class)) {
-				requestSettings.put(RestFullFormDataToMap.class, Map.class.cast(object));
+			if(parameter.isAnnotationPresent(RestFullMapToParam.class)) {
+				requestSettings.put(RestFullMapToParam.class, Map.class.cast(object));
 			}
 		}
 		

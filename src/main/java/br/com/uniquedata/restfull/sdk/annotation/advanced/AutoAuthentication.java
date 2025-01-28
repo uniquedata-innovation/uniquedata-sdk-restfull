@@ -7,9 +7,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullFormData;
-import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullFormDataToObject;
-import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullParamToMap;
-import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullParamToObject;
+import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullObjectToFormData;
+import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullMapToParam;
+import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullObjectToParam;
 
 /**
  * 
@@ -47,10 +47,10 @@ import br.com.uniquedata.restfull.sdk.annotation.simple.RestFullParamToObject;
  * @author Jaderson Berti
  * @author Unique Data Inovatation (company)
  * @since 1.0
- * @see RestFullParamToObject
- * @see RestFullParamToMap
+ * @see RestFullObjectToParam
+ * @see RestFullMapToParam
  * @see RestFullFormData
- * @see RestFullFormDataToObject
+ * @see RestFullObjectToFormData
  *
  */
 @Documented
