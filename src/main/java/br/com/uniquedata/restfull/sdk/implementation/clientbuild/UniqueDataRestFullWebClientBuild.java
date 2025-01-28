@@ -186,7 +186,7 @@ public class UniqueDataRestFullWebClientBuild {
         	responseHeaders.put(key, value.get(0));
         });
         
-        if(UniqueDataJacksonConfigBuild.canParseOrThrow((String) requestBody, responseType)) {
+        if(UniqueDataJacksonConfigBuild.canParse((String) requestBody, responseType)) {
         	final Object responseObject = UniqueDataJacksonConfigBuild.from((String) requestBody, responseType);
         	return (UniqueDataRestFullResponse<T>) new UniqueDataRestFullResponse<>(responseObject, responseHeaders, responseHttpStatus);
     	}

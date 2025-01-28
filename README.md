@@ -92,11 +92,9 @@ If your project uses Spring Boot, simply **scan** the framework in your main app
 
 ```java
 @SpringBootApplication
+@EnableUniqueDataRestFullClient
 public class Application {
     public static void main(final String[] args) {
-        // Scans the annotated classes and generates implementations automatically
-        UniqueDataRestFull.scan(Application.class);
-
         // Starts the Spring Boot application
         SpringApplication.run(Application.class, args);
     }

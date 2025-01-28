@@ -12,7 +12,7 @@ import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFullClient
 
 public class UniqueDataRestFullPackageIdentifier {
 	
-	public static void packageSimpleScanners(final Class<?> classeType) {
+	public static void packageSimpleScanners() {
 		final Reflections reflections = new Reflections(new ConfigurationBuilder()
 			.filterInputsBy(new FilterBuilder().include(".*\\.class$"))
 			.setUrls(ClasspathHelper.forJavaClassPath()));

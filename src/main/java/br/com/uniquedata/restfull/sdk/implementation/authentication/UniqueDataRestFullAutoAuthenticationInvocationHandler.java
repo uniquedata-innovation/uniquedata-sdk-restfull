@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
@@ -116,26 +115,7 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 					headersMap, UNIQUEDATA_RESTFULL_RESPONSE_TYPE);
 				
 				if(responseBody.getHttpStatus().isHttpNotSuccess()) {
-					final AtomicReference<String> responseBodyError = new AtomicReference<>();
-					final Object object = responseBody.getResponseBody();
-					
-					if(object instanceof String) {
-						responseBodyError.set((String) object);
-					}else {
-						responseBodyError.set(UniqueDataJacksonConfigBuild.toJsonPrettyPrinting(object));
-					}
-					
-					throw new UniqueDataRestFullException("@AutoAuthentication Error:\n"
-						+ "[POST] " + authenticate.fullUrlAuth() + "\n"
-						+ "================================================\n"
-						+ "["+responseBody.getHttpStatus().getHttpCode()+ " - " 
-						+ responseBody.getHttpStatus().getHttpStatusMessage()+"] "
-						+ "Error: Could not retrieve authorization object!\n"
-						+ "================================================\n"
-						+ "Request Body: " + UniqueDataJacksonConfigBuild.toJson(getRequestBody(headersMap)) + "\n"
-						+ "================================================\n"
-						+ "Reponse Body: " + responseBodyError.get(), ExceptionType.AUTHENTICATION, 
-						responseBody);
+					throw new UniqueDataRestFullException(UniqueDataJacksonConfigBuild.toJsonPrettyPrinting(responseBody), ExceptionType.AUTHENTICATION, responseBody);
 				}
 				
 				LOGGER.info("The Auto Authentication process has been initialized successfully!");
@@ -143,7 +123,6 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 			}
 		}catch (UniqueDataRestFullException u) {
 			LOGGER.error("Error while building authentication", u);
-			throw u;
 		}catch (Exception e) {
 			LOGGER.error("Error while building authentication", e);
 			throw new UniqueDataRestFullException(e, ExceptionType.AUTHENTICATION);

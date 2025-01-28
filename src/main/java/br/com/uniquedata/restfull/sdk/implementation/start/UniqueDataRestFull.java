@@ -22,15 +22,6 @@ public class UniqueDataRestFull {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UniqueDataRestFull.class);
 	
-	static {
-		try {
-	        LOGGER.info(IOUtils.toString(UniqueDataRestFull.class.getResourceAsStream(SDK_BANNER), "UTF-8"));
-	    } catch (IOException e) {
-	        LOGGER.error("Falha ao carregar o banner!", e);
-	    }
-	}
-	
-	
 	/**
 	 * For SpringBoot use.
 	 * 
@@ -60,9 +51,9 @@ public class Application implements CommandLineRunner {
 	 * 
 	 * @param class start application.
 	 */
-	public static void scan(final Class<?> classType) {
+	public static void startSptringBootScan() {
 		LOGGER.info("Starting Unique Data RestFull Sdk + Spring Boot application scan.");
-		UniqueDataRestFullPackageIdentifier.packageSimpleScanners(classType);
+		UniqueDataRestFullPackageIdentifier.packageSimpleScanners();
 	}
 	
 	/**
@@ -92,11 +83,19 @@ public interface TestApi {
 	public static <T> T getApi(final Class<T> classType) {
 		if(UniqueDataRestFullBuiderBean.isNewBuildBean()) {
 			LOGGER.info("Starting UniqueData RestFull SDK scan.");
-			UniqueDataRestFullPackageIdentifier.packageSimpleScanners(classType);
-			UniqueDataRestFullBuiderBean.build();
+			UniqueDataRestFullPackageIdentifier.packageSimpleScanners();
+			new UniqueDataRestFullBuiderBean().build();
 		}
 		
 		return UniqueDataRestFullManagerBean.getBean(classType);
+	}
+	
+	static {
+		try {
+	        LOGGER.info(IOUtils.toString(UniqueDataRestFull.class.getResourceAsStream(SDK_BANNER), "UTF-8"));
+	    } catch (IOException e) {
+	        LOGGER.error("Falha ao carregar o banner!", e);
+	    }
 	}
 	
 }

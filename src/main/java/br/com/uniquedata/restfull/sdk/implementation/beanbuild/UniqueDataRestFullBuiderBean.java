@@ -5,9 +5,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import br.com.uniquedata.restfull.sdk.annotation.advanced.AutoAuthentication;
 import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFullClient;
@@ -19,35 +22,37 @@ import br.com.uniquedata.restfull.sdk.implementation.authentication.UniqueDataRe
 import br.com.uniquedata.restfull.sdk.implementation.authentication.UniqueDataRestFullAutoAuthenticationValidade;
 import br.com.uniquedata.restfull.sdk.implementation.start.UniqueDataRestFullManagerBean;
 
-@Component
-public class UniqueDataRestFullBuiderBean implements BeanPostProcessor {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class UniqueDataRestFullBuiderBean implements BeanPostProcessor, BeanFactoryAware {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UniqueDataRestFullBuiderBean.class);
 	
 	private static AtomicBoolean newBuildBean = new AtomicBoolean(true);
 	
-	private DefaultListableBeanFactory beanFactory;
+    private DefaultListableBeanFactory beanFactory;
 
-    public UniqueDataRestFullBuiderBean(final DefaultListableBeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
+    @Override
+    public void setBeanFactory(final BeanFactory beanFactory) throws BeansException {
+        if (beanFactory instanceof DefaultListableBeanFactory) {
+            this.beanFactory = (DefaultListableBeanFactory) beanFactory;
+            build();
+        } else {
+            throw new IllegalStateException("BeanFactory not instance of DefaultListableBeanFactory");
+        }
     }
-    
-    public static void build() {
+
+    public void build() {
 		try {
-			final UniqueDataRestFullBuiderBean buiderBean = new UniqueDataRestFullBuiderBean(null);
-			
 			for (final Class<?> classType : UniqueDataRestFullManagerBean.getClassTypes()) {
-				
 				if(classType.isInterface()) {
 					if(classType.isAnnotationPresent(UniqueDataRestFullClient.class)) {
-						buiderBean.invocationHandlerMethodRequestBuild(classType);
+						invocationHandlerMethodRequestBuild(classType);
 					}else if(classType.isAnnotationPresent(AutoAuthentication.class)) {
-						buiderBean.autoAuthenticationInterfaceBuild(classType);	
+						autoAuthenticationInterfaceBuild(classType);	
 					}
 				}else if(classType.isAnnotationPresent(AutoAuthentication.class)){
-					buiderBean.autoAuthenticationClassBuild(classType);
+					autoAuthenticationClassBuild(classType);
 				}
-				
 			}
 		}catch (Exception e) {
 			LOGGER.error(null, e);
@@ -131,33 +136,6 @@ public class UniqueDataRestFullBuiderBean implements BeanPostProcessor {
 		}
     }
     
-	@Override
-    public Object postProcessAfterInitialization(final Object bean, final String beanName) throws BeansException {
-        if(newBuildBean.get()) {
-        	try {
-        		for (final Class<?> classType : UniqueDataRestFullManagerBean.getClassTypes()) {
-        			if(classType.isInterface()) {
-    					if(classType.isAnnotationPresent(UniqueDataRestFullClient.class)) {
-    						invocationHandlerMethodRequestBuild(classType);
-    					}else if(classType.isAnnotationPresent(AutoAuthentication.class)) {
-    						autoAuthenticationInterfaceBuild(classType);
-    					}
-    				}else if(classType.isAnnotationPresent(AutoAuthentication.class)){
-    					autoAuthenticationClassBuild(classType);
-    				}        		
-        		}
-        		
-        		LOGGER.info("UniqueData RestFull SDK initialized successfully!");
-        	}catch (Exception e) {
-        		LOGGER.error(null, e);
-			}finally {
-				newBuildBean.set(false);
-			}
-        }
-
-        return bean;
-    }
-	
 	public static boolean isNewBuildBean() {
 		return newBuildBean.get();
 	}
