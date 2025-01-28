@@ -140,22 +140,27 @@ Complete example with default JSON:
 @AutoAuthentication(
     // If enabled, the token is persisted on disk and automatically recovered
     autoRecover = true,
+    
     // Authentication type, in this case Bearer
     type = AuthType.BEARER_TOKEN,
+
     // Authentication configuration
     authenticate = @Authentication(
         // Enable or disable authentication
         enabled = true,
+    
         // Full URL to retrieve the token
         fullUrlAuth = "https://localhost:9095/autorizy",
+        
         // Environment variable containing the credentials in JSON format
         credentialJsonEnvironmentVariable = "MY_CREDENTIAL_ENV", // "{"clientId": "124", "secret": "123","grantType":"client_credentials"}"
-        // Or For testing in development
-        // credentialJsonForTest = "{"clientId": "124", "secret": "123","grantType":"client_credentials"}",
+
         // Class where credentials will be mapped
         typeClassCredential = CredencialDto.class,
+
         // Class response with authorized
         typeClassAuthorize = ReponseAuthorizeDto.class,
+
         // Additional headers for the authentication request
         additionalHeaders = {
             @AdditionalHeader(headerName = "teste", headerValue = "auth")
@@ -173,8 +178,10 @@ public interface AutoAuthencatedTestApi {
     // Your protected API methods...
 }
 ```
----
+
 > **export MY_CREDENTIAL_ENV="{\"clientId\": \"124\", \"secret\": \"123\",\"grantType\":\"client_credentials\"}".**
+
+---
 
 ### Bearer with Form-data
 
@@ -351,18 +358,20 @@ public interface ExampleApi {
         @RestFullParam("offset") int offset,
         @RestFullParam("limit") int limit
     );
-    
-    public static void main(String[] args) {
-	  		final ExampleApi api = ...
-	  		UniqueDataRestFullResponse<List<TestResponseBodyDto>> response = api.getProducts(0,1);
-	  		
-	  		final List<TestResponseBodyDto> list = response.getResponseBody();
-	  		final ResponseHttpStatus httpStatus = response.getHttpStatus();
-	  		final Map<String, String> responseHeaders = response.getResponseHeaders();
-	 }
-    
+ 
 }
 ```
+
+```java
+    public static void main(final String[] args) {
+        final ExampleApi api = UniqueDataRestFull.getApi(ExampleApi.class);
+        final UniqueDataRestFullResponse<List<TestResponseBodyDto>> response = api.getProducts(0,1);
+        
+        final List<TestResponseBodyDto> list = response.getResponseBody();
+        final ResponseHttpStatus httpStatus = response.getHttpStatus();
+        final Map<String, String> responseHeaders = response.getResponseHeaders();
+    }
+ ```
 
 ---
 
