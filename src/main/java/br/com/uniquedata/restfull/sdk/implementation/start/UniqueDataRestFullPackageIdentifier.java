@@ -15,7 +15,7 @@ public class UniqueDataRestFullPackageIdentifier {
 	public static void packageSimpleScanners(final Class<?> classeType) {
 		final Reflections reflections = new Reflections(new ConfigurationBuilder()
 			.filterInputsBy(new FilterBuilder().include(".*\\.class$"))
-			.setUrls(ClasspathHelper.forClass(classeType)));
+			.setUrls(ClasspathHelper.forJavaClassPath()));
 		
 		reflections.getTypesAnnotatedWith(AutoAuthentication.class).forEach(classType -> {
 			UniqueDataRestFullManagerBean.addClassType(classType);
@@ -29,7 +29,7 @@ public class UniqueDataRestFullPackageIdentifier {
 	public static void packageAdvancedScanners(final Class<?> classeType) {
 		final Reflections reflections = new Reflections(new ConfigurationBuilder()
 			.filterInputsBy(new FilterBuilder().include(".*\\.class$"))
-			.setUrls(ClasspathHelper.forClassLoader())
+			.setUrls(ClasspathHelper.forJavaClassPath())
 			.setScanners(new SubTypesScanner(false), new TypeAnnotationsScanner()));
 				
 		reflections.getTypesAnnotatedWith(AutoAuthentication.class).forEach(classType -> {
