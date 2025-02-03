@@ -16,13 +16,17 @@
   <distributionManagement>
    <repository>
      <id>github</id>
-     <name>GitHub OWNER Apache Maven Packages</name>
+     <name>GitHub uniquedata-innovation Apache Maven Packages</name>
      <url>https://maven.pkg.github.com/uniquedata-innovation/uniquedata-restfull-sdk</url>
    </repository>
- </distributionManagement>
+  </distributionManagement>
   
   <dependencies>
-  
+  	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-context</artifactId>
+	    <version>6.2.1</version>
+		</dependency>
 		<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-webflux</artifactId>
@@ -34,61 +38,21 @@
 	        </exclusion>
 	    </exclusions>
 		</dependency>
-		
-		<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-context</artifactId>
-	    <version>6.2.1</version>
-		</dependency>
-		
 		<dependency>
     	<groupId>io.projectreactor</groupId>
     	<artifactId>reactor-core</artifactId>
     	<version>3.7.1</version>
 		</dependency>
-		
 		<dependency>
-    	<groupId>org.reflections</groupId>
-    	<artifactId>reflections</artifactId>
-    	<version>0.9.11</version>
+  		<groupId>br.com.uniquedata.sdk.helper</groupId>
+  		<artifactId>uniquedata-sdk-helper</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
 		<dependency>
-	    <groupId>commons-io</groupId>
-	    <artifactId>commons-io</artifactId>
-	    <version>2.18.0</version>
+  		<groupId>br.com.uniquedata.sdk.dependencies</groupId>
+  		<artifactId>uniquedata-sdk-dependencies</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
-		<dependency>
-    	<groupId>com.fasterxml.jackson.core</groupId>
-    	<artifactId>jackson-core</artifactId>
-    	<version>2.15.2</version>
-		</dependency>
-		
-		<dependency>
-		   <groupId>com.fasterxml.jackson.core</groupId>
-		   <artifactId>jackson-databind</artifactId>
-		   <version>2.15.2</version>
-		</dependency>
-		
-		<dependency>
-	    <groupId>com.fasterxml.jackson.datatype</groupId>
-	    <artifactId>jackson-datatype-jsr310</artifactId>
-	    <version>2.15.2</version>
-		</dependency>
-		
-		<dependency>
-	    <groupId>ch.qos.logback</groupId>
-	    <artifactId>logback-classic</artifactId>
-	    <version>1.2.13</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>jakarta.annotation</groupId>
-		    <artifactId>jakarta.annotation-api</artifactId>
-		    <version>3.0.0</version>
-		</dependency>
-  
   </dependencies>
   
 	<build>
