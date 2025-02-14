@@ -55,6 +55,19 @@
 		</dependency>
   </dependencies>
   
+  <repositories>
+	  <repository>
+	    <id>github-restfull-sdk</id>
+	    <url>https://maven.pkg.github.com/uniquedata-innovation/uniquedata-restfull-sdk</url>
+	    <releases>
+	      <enabled>true</enabled>
+	    </releases>
+	    <snapshots>
+	      <enabled>true</enabled>
+	    </snapshots>
+	  </repository>
+	</repositories>
+  
 	<build>
     <plugins>
     	<plugin>

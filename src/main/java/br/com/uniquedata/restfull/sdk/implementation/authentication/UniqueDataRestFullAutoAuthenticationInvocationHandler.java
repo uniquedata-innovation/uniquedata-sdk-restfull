@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 
@@ -60,7 +61,7 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 		final boolean isAuthentication = isAuthTypeBeararToken && UniqueDataRestFullAutoAuthencationBuild.AUTHENTICATE.equals(method.getName());
 
 		if(isAuthentication && authenticate.enabled()) {
-			LOGGER.info("[UniqueData]S tarting automatic authentication ...");
+			LOGGER.info("[UniqueData] Starting automatic authentication ...");
 			authentication(authenticate, interception);
 		}
 		
@@ -204,7 +205,9 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 		final Class<?> typeClassCredential = authenticate.typeClassCredential();
 		final Object requestBody = UniqueDataRestFullAuthenticateMemory.get(typeClassCredential);
 		
-		if(hasContentType(headersMap)) {
+		if(hasContentType(headersMap) && (headersMap.containsValue(MediaType.MULTIPART_FORM_DATA.getType()) 
+			&& headersMap.containsValue(MediaType.APPLICATION_FORM_URLENCODED.getType()))) {
+			
 			return buildRestFullFormDataToObject(ObjectReflectionHelper
 				.getFieldNameAndValue(requestBody, RestFullField.class));
 		}
