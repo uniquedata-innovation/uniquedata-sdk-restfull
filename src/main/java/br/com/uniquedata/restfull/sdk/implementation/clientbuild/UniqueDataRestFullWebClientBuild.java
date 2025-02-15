@@ -47,12 +47,11 @@ public class UniqueDataRestFullWebClientBuild {
 	}
 	
 	public Object build(final String uri, final Object requestBody, final RestFullMethod restFullMethod, 
-			final RestFullMediaType contentyType, final RestFullMediaType acceptType, final Type returnType, 
-			final Class<?> webClientKey, final Map<String, String> headers, 
-			final boolean isForceUniqueDataRestFullResponse) {
+		final RestFullMediaType contentyType, final RestFullMediaType acceptType, final Type returnType, 
+		final Class<?> webClientKey, final Map<String, String> headers, 
+		final boolean isForceUniqueDataRestFullResponse) {
 			
 		if(isProtocolRequestBody(restFullMethod)) {
-			
 			if(isForceUniqueDataRestFullResponse || isUniqueDataRestFullResponse(returnType)) {
 				return responseParse(UniqueDataWebClientConfigBuild.getWebClient(webClientKey)
 					.method(HttpMethod.valueOf(restFullMethod.name()))

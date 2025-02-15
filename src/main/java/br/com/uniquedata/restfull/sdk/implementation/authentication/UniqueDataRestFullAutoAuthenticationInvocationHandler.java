@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 
@@ -35,6 +36,7 @@ import br.com.uniquedata.restfull.sdk.implementation.clientbuild.UniqueDataJacks
 import br.com.uniquedata.restfull.sdk.implementation.clientbuild.UniqueDataRestFullWebClientBuild;
 import br.com.uniquedata.restfull.sdk.implementation.clientbuild.UniqueDataWebClientConfigBuild;
 import br.com.uniquedata.restfull.sdk.pojo.GenericAuthorizeDto;
+import br.com.uniquedata.restfull.sdk.pojo.MapperExtractField;
 import br.com.uniquedata.restfull.sdk.pojo.MapperExtractFields;
 import br.com.uniquedata.restfull.sdk.pojo.UniqueDataRestFullResponse;
 
@@ -60,7 +62,7 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 		final boolean isAuthentication = isAuthTypeBeararToken && UniqueDataRestFullAutoAuthencationBuild.AUTHENTICATE.equals(method.getName());
 
 		if(isAuthentication && authenticate.enabled()) {
-			LOGGER.info("[UniqueData]S tarting automatic authentication ...");
+			LOGGER.info("[UniqueData] Starting automatic authentication ...");
 			authentication(authenticate, interception);
 		}
 		
@@ -149,16 +151,16 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 				+ "Alternatively, you can set the expireInMilliseconds value using @Interception.", ExceptionType.AUTHENTICATION);
 		}
 		
-		final Object bearerToken = mapperExtractFields.get(Bearer.class).getExtractField().getFieldValue();
-		final Object expireDate = mapperExtractFields.get(ExpireDate.class).getExtractField().getFieldValue();
+		final MapperExtractField bearerToken = mapperExtractFields.get(Bearer.class);
+		final MapperExtractField expireDate = mapperExtractFields.get(ExpireDate.class);
 
 		final GenericAuthorizeDto genericAuthorize = new GenericAuthorizeDto();
-		genericAuthorize.setBearerToken((String) bearerToken);
+		genericAuthorize.setBearerToken((String) bearerToken.getExtractField().getFieldValue());
 		genericAuthorize.setAutoRecover(autoAuthentication.autoRecover());
 		genericAuthorize.setClassTypeCredential(authenticate.typeClassCredential());
 		
 		if(expireDate != null) {
-			genericAuthorize.setExpireDate(parseToLocalDateTime(expireDate, responseBody.getClass()));
+			genericAuthorize.setExpireDate(parseToLocalDateTime(expireDate.getExtractField().getFieldValue(), responseBody.getClass()));
 		}else {
 			genericAuthorize.setExpireDate(LocalDateTime.now().plus(Duration.ofMillis(interception.expireInMilliseconds())));
 		}
@@ -204,7 +206,9 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 		final Class<?> typeClassCredential = authenticate.typeClassCredential();
 		final Object requestBody = UniqueDataRestFullAuthenticateMemory.get(typeClassCredential);
 		
-		if(hasContentType(headersMap)) {
+		if(hasContentType(headersMap) && (headersMap.containsValue(MediaType.MULTIPART_FORM_DATA.getType()) 
+			&& headersMap.containsValue(MediaType.APPLICATION_FORM_URLENCODED.getType()))) {
+			
 			return buildRestFullFormDataToObject(ObjectReflectionHelper
 				.getFieldNameAndValue(requestBody, RestFullField.class));
 		}

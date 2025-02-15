@@ -2,11 +2,13 @@ package br.com.uniquedata.restfull.sdk.implementation.authentication;
 
 import br.com.uniquedata.restfull.sdk.annotation.advanced.Authentication;
 import br.com.uniquedata.restfull.sdk.annotation.advanced.AutoAuthentication;
+import br.com.uniquedata.restfull.sdk.annotation.advanced.Interception;
 
 public class UniqueDataRestFullAutoAuthenticationValidade {
 	
-	public Validate validate(final AutoAuthentication authentication) {
-		final Authentication authenticate = authentication.authenticate();
+	public Validate validate(final AutoAuthentication autoAuthentication) {
+		final Interception interception = autoAuthentication.interception();
+		final Authentication authenticate = autoAuthentication.authenticate();
 		
 		if(authenticate.enabled() == true) {
 			if(!authenticate.credentialJsonForTest().isEmpty() && !authenticate.credentialJsonEnvironmentVariable().isEmpty()) {
@@ -25,8 +27,11 @@ public class UniqueDataRestFullAutoAuthenticationValidade {
 				if(env == null || env.isEmpty()) {
 					return new Validate(false, "If authentication is enabled and 'credentialJsonEnvironmentVariable' is chosen, an environment variable name must be provided.");
 				}
-			}
-			
+			}	
+		}
+		
+		if(interception.expireInMilliseconds() > 0 && interception.expireInMilliseconds() < 10) {
+			return new Validate(false, "If interception is enabled, you must provide a value for either expireInMilliseconds > 10 seconds");
 		}
 		
 		return new Validate(true, null);
