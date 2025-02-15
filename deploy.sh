@@ -2,9 +2,15 @@
 
 echo "maven deploy uniquedata-restfull-sdk started";
 
-mvn clean install -Pgithub-restfull-sdk-profile
+mvn clean
 
-mvn clean deploy -Pgithub-restfull-sdk-profile -X
+sleep 1;
+
+mvn install
+
+sleep 1;
+
+mvn deploy -Pgithub-restfull-sdk-profile
 
 echo "Finish success deploy!";
 

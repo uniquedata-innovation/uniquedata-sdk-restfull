@@ -36,6 +36,7 @@ import br.com.uniquedata.restfull.sdk.implementation.clientbuild.UniqueDataJacks
 import br.com.uniquedata.restfull.sdk.implementation.clientbuild.UniqueDataRestFullWebClientBuild;
 import br.com.uniquedata.restfull.sdk.implementation.clientbuild.UniqueDataWebClientConfigBuild;
 import br.com.uniquedata.restfull.sdk.pojo.GenericAuthorizeDto;
+import br.com.uniquedata.restfull.sdk.pojo.MapperExtractField;
 import br.com.uniquedata.restfull.sdk.pojo.MapperExtractFields;
 import br.com.uniquedata.restfull.sdk.pojo.UniqueDataRestFullResponse;
 
@@ -150,16 +151,16 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 				+ "Alternatively, you can set the expireInMilliseconds value using @Interception.", ExceptionType.AUTHENTICATION);
 		}
 		
-		final Object bearerToken = mapperExtractFields.get(Bearer.class).getExtractField().getFieldValue();
-		final Object expireDate = mapperExtractFields.get(ExpireDate.class).getExtractField().getFieldValue();
+		final MapperExtractField bearerToken = mapperExtractFields.get(Bearer.class);
+		final MapperExtractField expireDate = mapperExtractFields.get(ExpireDate.class);
 
 		final GenericAuthorizeDto genericAuthorize = new GenericAuthorizeDto();
-		genericAuthorize.setBearerToken((String) bearerToken);
+		genericAuthorize.setBearerToken((String) bearerToken.getExtractField().getFieldValue());
 		genericAuthorize.setAutoRecover(autoAuthentication.autoRecover());
 		genericAuthorize.setClassTypeCredential(authenticate.typeClassCredential());
 		
 		if(expireDate != null) {
-			genericAuthorize.setExpireDate(parseToLocalDateTime(expireDate, responseBody.getClass()));
+			genericAuthorize.setExpireDate(parseToLocalDateTime(expireDate.getExtractField().getFieldValue(), responseBody.getClass()));
 		}else {
 			genericAuthorize.setExpireDate(LocalDateTime.now().plus(Duration.ofMillis(interception.expireInMilliseconds())));
 		}
