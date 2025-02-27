@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>br.com.uniquedata.sdk.restfull</groupId>
+  <groupId>br.com.uniquedata.sdk.restfull.restfull</groupId>
   <artifactId>uniquedata-sdk-restfull</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   
@@ -23,12 +23,12 @@
   
   <dependencies>
     <dependency>
-      <groupId>br.com.uniquedata.sdk.dependencies</groupId>
+      <groupId>br.com.uniquedata.sdk.restfull.dependencies</groupId>
       <artifactId>uniquedata-sdk-dependencies</artifactId>
       <version>0.0.1</version>
     </dependency>
     <dependency>
-		<groupId>br.com.uniquedata.sdk.helper</groupId>
+		<groupId>br.com.uniquedata.sdk.restfull.helper</groupId>
 		<artifactId>uniquedata-sdk-helper</artifactId>
 		<version>0.0.1</version>
 	</dependency>
