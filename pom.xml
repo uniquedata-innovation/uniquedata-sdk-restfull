@@ -23,12 +23,12 @@
   
   <dependencies>
     <dependency>
-      <groupId>br.com.uniquedata.sdk.restfull.dependencies</groupId>
+      <groupId>br.com.uniquedata.sdk.dependencies</groupId>
       <artifactId>uniquedata-sdk-dependencies</artifactId>
       <version>0.0.1</version>
     </dependency>
     <dependency>
-		<groupId>br.com.uniquedata.sdk.restfull.helper</groupId>
+		<groupId>br.com.uniquedata.sdk.helper</groupId>
 		<artifactId>uniquedata-sdk-helper</artifactId>
 		<version>0.0.1</version>
 	</dependency>
