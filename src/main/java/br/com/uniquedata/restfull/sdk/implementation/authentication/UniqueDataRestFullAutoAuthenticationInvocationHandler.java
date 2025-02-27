@@ -30,15 +30,15 @@ import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFull.RestF
 import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFull.RestFullMethod;
 import br.com.uniquedata.restfull.sdk.exception.UniqueDataRestFullException;
 import br.com.uniquedata.restfull.sdk.exception.UniqueDataRestFullException.ExceptionType;
-import br.com.uniquedata.restfull.sdk.helper.ObjectReflectionHelper;
-import br.com.uniquedata.restfull.sdk.helper.UniqueDataReflectMapperHelper;
 import br.com.uniquedata.restfull.sdk.implementation.clientbuild.UniqueDataJacksonConfigBuild;
 import br.com.uniquedata.restfull.sdk.implementation.clientbuild.UniqueDataRestFullWebClientBuild;
 import br.com.uniquedata.restfull.sdk.implementation.clientbuild.UniqueDataWebClientConfigBuild;
 import br.com.uniquedata.restfull.sdk.pojo.GenericAuthorizeDto;
-import br.com.uniquedata.restfull.sdk.pojo.MapperExtractField;
-import br.com.uniquedata.restfull.sdk.pojo.MapperExtractFields;
 import br.com.uniquedata.restfull.sdk.pojo.UniqueDataRestFullResponse;
+import br.com.uniquedata.sdk.helper.field.FieldReflectionHelper;
+import br.com.uniquedata.sdk.helper.pojo.reflectmapper.MapperExtractField;
+import br.com.uniquedata.sdk.helper.pojo.reflectmapper.MapperExtractFields;
+import br.com.uniquedata.sdk.helper.reflect.mapper.ReflectionMapperHelper;
 
 public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements InvocationHandler {
 	
@@ -135,7 +135,7 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 		final Authentication authenticate = autoAuthentication.authenticate();
 		final Interception interception = autoAuthentication.interception();
 		
-		final MapperExtractFields mapperExtractFields = UniqueDataReflectMapperHelper
+		final MapperExtractFields mapperExtractFields = ReflectionMapperHelper
 			.refletc(responseBody)
 			.addScanBy(Bearer.class)
 			.addScanBy(ExpireDate.class)
@@ -151,8 +151,8 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 				+ "Alternatively, you can set the expireInMilliseconds value using @Interception.", ExceptionType.AUTHENTICATION);
 		}
 		
-		final MapperExtractField bearerToken = mapperExtractFields.get(Bearer.class);
-		final MapperExtractField expireDate = mapperExtractFields.get(ExpireDate.class);
+		final MapperExtractField bearerToken = mapperExtractFields.getUniqueResult(Bearer.class);
+		final MapperExtractField expireDate = mapperExtractFields.getUniqueResult(ExpireDate.class);
 
 		final GenericAuthorizeDto genericAuthorize = new GenericAuthorizeDto();
 		genericAuthorize.setBearerToken((String) bearerToken.getExtractField().getFieldValue());
@@ -209,8 +209,7 @@ public class UniqueDataRestFullAutoAuthenticationInvocationHandler implements In
 		if(hasContentType(headersMap) && (headersMap.containsValue(MediaType.MULTIPART_FORM_DATA.getType()) 
 			&& headersMap.containsValue(MediaType.APPLICATION_FORM_URLENCODED.getType()))) {
 			
-			return buildRestFullFormDataToObject(ObjectReflectionHelper
-				.getFieldNameAndValue(requestBody, RestFullField.class));
+			return buildRestFullFormDataToObject(FieldReflectionHelper.getFieldNameAndValue(requestBody, RestFullField.class));
 		}
 		
 		return requestBody;

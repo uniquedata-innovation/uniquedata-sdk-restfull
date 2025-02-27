@@ -26,11 +26,11 @@ import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFull.RestF
 import br.com.uniquedata.restfull.sdk.exception.UniqueDataRestFullException;
 import br.com.uniquedata.restfull.sdk.exception.UniqueDataRestFullException.ExceptionType;
 import br.com.uniquedata.restfull.sdk.helper.GenericReturnTypeClassHelper;
-import br.com.uniquedata.restfull.sdk.helper.ObjectReflectionHelper;
-import br.com.uniquedata.restfull.sdk.pojo.GenericReturnTypeClass;
-import br.com.uniquedata.restfull.sdk.pojo.GenericReturnTypeClass.GenericReturnType;
 import br.com.uniquedata.restfull.sdk.pojo.ResponseHttpStatus;
 import br.com.uniquedata.restfull.sdk.pojo.UniqueDataRestFullResponse;
+import br.com.uniquedata.sdk.helper.object.ObjectReflectionHelper;
+import br.com.uniquedata.sdk.helper.pojo.others.GenericReturnTypeClass;
+import br.com.uniquedata.sdk.helper.pojo.others.GenericReturnTypeClass.GenericReturnType;
 import reactor.core.publisher.Mono;
 
 public class UniqueDataRestFullWebClientBuild {
@@ -166,8 +166,8 @@ public class UniqueDataRestFullWebClientBuild {
 	
 	private <T> Function<ClientResponse, Mono<UniqueDataRestFullResponse<T>>> exchangeToMonoBuild(final Class<T> responseType) {
 	    return clientResponse -> clientResponse.bodyToMono(String.class)
-	    	.map(requestBody -> toResponse(clientResponse, requestBody, responseType))
-	    	.defaultIfEmpty(toResponse(clientResponse));
+	    	.map(responseBody -> toResponse(clientResponse, responseBody, responseType));
+	    	//.defaultIfEmpty(toResponse(clientResponse));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -185,7 +185,11 @@ public class UniqueDataRestFullWebClientBuild {
         	responseHeaders.put(key, value.get(0));
         });
         
-        if(UniqueDataJacksonConfigBuild.canParse((String) requestBody, responseType)) {
+        if(requestBody == null) {
+        	return new UniqueDataRestFullResponse<>(null, responseHeaders, responseHttpStatus);
+        }
+        
+        if(UniqueDataJacksonConfigBuild.canParseOrThrow((String) requestBody, responseType)) {
         	final Object responseObject = UniqueDataJacksonConfigBuild.from((String) requestBody, responseType);
         	return (UniqueDataRestFullResponse<T>) new UniqueDataRestFullResponse<>(responseObject, responseHeaders, responseHttpStatus);
     	}
@@ -193,20 +197,20 @@ public class UniqueDataRestFullWebClientBuild {
 		return (UniqueDataRestFullResponse<T>) new UniqueDataRestFullResponse<String>((String) requestBody, responseHeaders, responseHttpStatus);
 	}
 	
-	private <T> UniqueDataRestFullResponse<T> toResponse(final ClientResponse clientResponse){
-		final HttpStatus status = (HttpStatus) clientResponse.statusCode();
-		
-        final ResponseHttpStatus responseHttpStatus = new ResponseHttpStatus();
-        responseHttpStatus.setHttpCode(status.value());
-        responseHttpStatus.setHttpStatusMessage(status.getReasonPhrase());
-        
-        final Map<String, String> responseHeaders = new HashMap<>();
-        clientResponse.headers().asHttpHeaders().forEach((key, value) -> {
-        	responseHeaders.put(key, value.get(0));
-        });
-        
-		return new UniqueDataRestFullResponse<>(null, responseHeaders, responseHttpStatus);
-	}
+//	private <T> UniqueDataRestFullResponse<T> toResponse(final ClientResponse clientResponse){
+//		final HttpStatus status = (HttpStatus) clientResponse.statusCode();
+//		
+//        final ResponseHttpStatus responseHttpStatus = new ResponseHttpStatus();
+//        responseHttpStatus.setHttpCode(status.value());
+//        responseHttpStatus.setHttpStatusMessage(status.getReasonPhrase());
+//        
+//        final Map<String, String> responseHeaders = new HashMap<>();
+//        clientResponse.headers().asHttpHeaders().forEach((key, value) -> {
+//        	responseHeaders.put(key, value.get(0));
+//        });
+//        
+//		return new UniqueDataRestFullResponse<>(null, responseHeaders, responseHttpStatus);
+//	}
 	
 	private Consumer<HttpHeaders> toConsumerHttpHeaders(final Map<String, String> headers){
 		final Consumer<HttpHeaders> consumers = consumerHttpHeaders -> {

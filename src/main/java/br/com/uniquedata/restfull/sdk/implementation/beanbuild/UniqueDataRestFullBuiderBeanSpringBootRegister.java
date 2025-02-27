@@ -14,9 +14,9 @@ public class UniqueDataRestFullBuiderBeanSpringBootRegister implements ImportBea
 	
     @Override
     public void registerBeanDefinitions(final AnnotationMetadata metadata, final BeanDefinitionRegistry registry) {
-        if (!registry.containsBeanDefinition("uniqueDataRestFullBuiderBean")) {
+    	if (!registry.containsBeanDefinition("uniqueDataRestFullBuiderBean")) {
         	UniqueDataRestFull.startSptringBootScan();
-
+        	
             final BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(UniqueDataRestFullBuiderBean.class);
             builder.setAutowireMode(AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE);
             registry.registerBeanDefinition("uniqueDataRestFullBuiderBean", builder.getBeanDefinition());
@@ -26,4 +26,10 @@ public class UniqueDataRestFullBuiderBeanSpringBootRegister implements ImportBea
 	@Override
 	public void setApplicationContext(final ApplicationContext applicationContext)	{}
 
+	@SuppressWarnings("unused")
+	private String renameBean(final String classTypeSimpleName) {
+		return String.valueOf(classTypeSimpleName.charAt(0)).toLowerCase()
+			.concat(classTypeSimpleName.substring(1, classTypeSimpleName.length()));
+	}
+	
 }

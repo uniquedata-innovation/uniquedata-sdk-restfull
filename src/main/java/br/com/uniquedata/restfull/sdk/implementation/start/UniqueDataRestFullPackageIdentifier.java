@@ -1,5 +1,9 @@
 package br.com.uniquedata.restfull.sdk.implementation.start;
 
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -13,9 +17,12 @@ import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFullClient
 public class UniqueDataRestFullPackageIdentifier {
 	
 	public static void packageSimpleScanners() {
-		final Reflections reflections = new Reflections(new ConfigurationBuilder()
-			.filterInputsBy(new FilterBuilder().include(".*\\.class$"))
-			.setUrls(ClasspathHelper.forJavaClassPath()));
+        final Set<URL> urls = new HashSet<>(ClasspathHelper.forClassLoader());
+        urls.addAll(ClasspathHelper.forJavaClassPath());
+
+        final Reflections reflections = new Reflections(new ConfigurationBuilder()
+        	.setUrls(urls)
+            .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner()));
 		
 		reflections.getTypesAnnotatedWith(AutoAuthentication.class).forEach(classType -> {
 			UniqueDataRestFullManagerBean.addClassType(classType);

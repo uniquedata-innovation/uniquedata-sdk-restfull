@@ -29,8 +29,8 @@ import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFullOpitio
 import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFullPatch;
 import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFullPost;
 import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFullPut;
-import br.com.uniquedata.restfull.sdk.helper.ObjectReflectionHelper;
 import br.com.uniquedata.restfull.sdk.implementation.clientbuild.UniqueDataRestFullWebClientBuild;
+import br.com.uniquedata.sdk.helper.field.FieldReflectionHelper;
 
 /**
  * 
@@ -160,7 +160,7 @@ public class UniqueDataRestFullBuiderBeanInvocationHandler implements Invocation
 	private String buildRestFullObjectToParam(String endpoint, final Map<String, Object> restFullParamBody) {
 		if(!restFullParamBody.isEmpty()) {
 			final Object object = restFullParamBody.get(RestFullObjectToParam.class.getName());
-			final Map<String, Object> parameters = ObjectReflectionHelper.getFieldNameAndValue(object, RestFullField.class);
+			final Map<String, Object> parameters = FieldReflectionHelper.getFieldNameAndValue(object, RestFullField.class);
 			
 			for (final Entry<String, Object> parameter : parameters.entrySet()) {
 				if(endpoint.contains("?")) {
@@ -189,7 +189,7 @@ public class UniqueDataRestFullBuiderBeanInvocationHandler implements Invocation
 	private String buildRestFullObjectToFormData(String buildingFormData, final Map<String, Object> restFullFormDataToObject) {
 		if(!restFullFormDataToObject.isEmpty()) {
 			final Object object = restFullFormDataToObject.get(RestFullObjectToFormData.class.getName());
-			final Map<String, Object> parameters = ObjectReflectionHelper.getFieldNameAndValue(object, RestFullField.class);
+			final Map<String, Object> parameters = FieldReflectionHelper.getFieldNameAndValue(object, RestFullField.class);
 			
 			for (final Entry<String, Object> parameter : parameters.entrySet()) {
 				if(buildingFormData == null || buildingFormData.isEmpty()) {

@@ -16,11 +16,11 @@ import br.com.uniquedata.restfull.sdk.annotation.advanced.AutoAuthentication;
 import br.com.uniquedata.restfull.sdk.annotation.simple.UniqueDataRestFullClient;
 import br.com.uniquedata.restfull.sdk.exception.UniqueDataRestFullException;
 import br.com.uniquedata.restfull.sdk.exception.UniqueDataRestFullException.ExceptionType;
-import br.com.uniquedata.restfull.sdk.helper.ObjectReflectionHelper;
 import br.com.uniquedata.restfull.sdk.implementation.authentication.UniqueDataRestFullAutoAuthencationBuild;
 import br.com.uniquedata.restfull.sdk.implementation.authentication.UniqueDataRestFullAutoAuthenticationInvocationHandler;
 import br.com.uniquedata.restfull.sdk.implementation.authentication.UniqueDataRestFullAutoAuthenticationValidade;
 import br.com.uniquedata.restfull.sdk.implementation.start.UniqueDataRestFullManagerBean;
+import br.com.uniquedata.sdk.helper.object.ObjectReflectionHelper;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class UniqueDataRestFullBuiderBean implements BeanPostProcessor, BeanFactoryAware {
@@ -63,8 +63,8 @@ public class UniqueDataRestFullBuiderBean implements BeanPostProcessor, BeanFact
 		LOGGER.info("UniqueData RestFull SDK initialized successfully!");
 	}
     
-    private void autoAuthenticationInterfaceBuild(final Class<?> interfacetype) {
-    	final AutoAuthentication annotation = interfacetype.getAnnotation(AutoAuthentication.class);
+    private void autoAuthenticationInterfaceBuild(final Class<?> interfaceType) {
+    	final AutoAuthentication annotation = interfaceType.getAnnotation(AutoAuthentication.class);
     	final UniqueDataRestFullAutoAuthenticationValidade authenticationValidade = new UniqueDataRestFullAutoAuthenticationValidade();
 		final UniqueDataRestFullAutoAuthenticationValidade.Validate validate = authenticationValidade.validate(annotation);
 		
@@ -76,10 +76,10 @@ public class UniqueDataRestFullBuiderBean implements BeanPostProcessor, BeanFact
 			((UniqueDataRestFullAutoAuthencationBuild) newProxyInstance).interception();;
 			
 			if(isSpringBoot()) {
-				beanFactory.registerSingleton(interfacetype.getSimpleName(), newProxyInstance);
+				beanFactory.registerSingleton(renameBean(interfaceType.getSimpleName()), newProxyInstance);
 			}
 				
-			UniqueDataRestFullManagerBean.addBean(interfacetype, newProxyInstance);	
+			UniqueDataRestFullManagerBean.addBean(interfaceType, newProxyInstance);	
 		}else {
 			LOGGER.error(validate.getMessage());
 			throw new UniqueDataRestFullException(validate.getMessage(), ExceptionType.START_CONFIGURATION);
@@ -114,7 +114,7 @@ public class UniqueDataRestFullBuiderBean implements BeanPostProcessor, BeanFact
 				new UniqueDataRestFullBuiderBeanInvocationHandler(annotation.baseUrl(), Void.class));
     		
     		if(isSpringBoot()) {
-    			beanFactory.registerSingleton(interfaceType.getSimpleName(), newProxyInstance);
+    			beanFactory.registerSingleton(renameBean(interfaceType.getSimpleName()), newProxyInstance);
 			}
 				
 			UniqueDataRestFullManagerBean.addBean(interfaceType, newProxyInstance);			
@@ -126,7 +126,7 @@ public class UniqueDataRestFullBuiderBean implements BeanPostProcessor, BeanFact
 				new UniqueDataRestFullBuiderBeanInvocationHandler(annotation.baseUrl(), typeClassCredential));
 			
 			if(isSpringBoot()) {
-				beanFactory.registerSingleton(interfaceType.getSimpleName(), newProxyInstance);
+				beanFactory.registerSingleton(renameBean(interfaceType.getSimpleName()), newProxyInstance);
 			}
 			
 			UniqueDataRestFullManagerBean.addBean(interfaceType, newProxyInstance);
@@ -142,6 +142,11 @@ public class UniqueDataRestFullBuiderBean implements BeanPostProcessor, BeanFact
 	
 	private boolean isSpringBoot() {
 		return beanFactory != null;
+	}
+	
+	private String renameBean(final String classTypeSimpleName) {
+		return String.valueOf(classTypeSimpleName.charAt(0)).toLowerCase()
+			.concat(classTypeSimpleName.substring(1, classTypeSimpleName.length()));
 	}
 	
 }
