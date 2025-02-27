@@ -1,33 +1,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>br.com.uniquedata-restfull-sdk</groupId>
-  <artifactId>uniquedata-restfull-sdk</artifactId>
+  <groupId>br.com.uniquedata.sdk.restfull</groupId>
+  <artifactId>uniquedata-sdk-restfull</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   
   <properties>
-  	<java.version>17</java.version>
-	<maven.compiler.source>17</maven.compiler.source>
+    <java.version>17</java.version>
+    <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <maven.compiler.release>17</maven.compiler.release>
-  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
   
   <distributionManagement>
    <repository>
      <id>github</id>
      <name>GitHub uniquedata-innovation Apache Maven Packages</name>
-     <url>https://maven.pkg.github.com/uniquedata-innovation/uniquedata-restfull-sdk</url>
+     <url>https://maven.pkg.github.com/uniquedata-innovation/uniquedata-sdk-restfull</url>
    </repository>
   </distributionManagement>
   
   <dependencies>
-  	<dependency>
-		<groupId>br.com.uniquedata.sdk.dependencies</groupId>
-		<artifactId>uniquedata-sdk-dependencies</artifactId>
-		<version>0.0.1</version>
-	</dependency>
-	<dependency>
+    <dependency>
+      <groupId>br.com.uniquedata.sdk.dependencies</groupId>
+      <artifactId>uniquedata-sdk-dependencies</artifactId>
+      <version>0.0.1</version>
+    </dependency>
+    <dependency>
 		<groupId>br.com.uniquedata.sdk.helper</groupId>
 		<artifactId>uniquedata-sdk-helper</artifactId>
 		<version>0.0.1</version>
