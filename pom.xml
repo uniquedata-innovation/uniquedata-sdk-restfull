@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>br.com.uniquedata.sdk.restfull.restfull</groupId>
   <artifactId>uniquedata-sdk-restfull</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1-BETA.1</version>
   
   <properties>
     <java.version>17</java.version>
