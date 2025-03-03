@@ -1,9 +1,37 @@
 # UniqueDataRestFullClient Framework
 
+> **by UniqueData Innovation company from Brazil**
+
+---
+
 > **Simplify your HTTP requests with automatic authentication and powerful interceptors.**
 
-**UniqueDataRestFullClient** is a Java framework inspired by Feign, designed to speed up the development of HTTP integrations in Java projects. It provides automatic Bearer token authentication, configurable interceptors, and advanced request handling features. In addition, it is fully object-oriented, allowing you to pass parameters and form-data as objects, without the need to manually map each field. 
-**By UniqueData Innovation company from Brazil**
+**UniqueDataRestFullClient** is a Java framework inspired by Feign, designed to speed up the development of HTTP integrations in Java projects. It provides automatic Bearer token authentication, configurable interceptors, and advanced request handling features. In addition, it is fully object-oriented, allowing you to pass parameters and form-data as objects, without the need to manually map each field.
+
+---
+
+## Table of Contents
+
+1. [Key Features](#key-features)  
+2. [Installation](#installation)  
+   - [Maven Dependency](#maven-dependency)  
+   - [System Requirements](#system-requirements)    
+3. [Using simple mode](#using-simple-mode)  
+   - [Usage Example](#usage-example)
+4. [Using with Spring Boot](#using-with-spring-boot)  
+   - [Configuration Example](#configuration-example)   
+5. [Automatic Authentication](#automatic-authentication)  
+   - [Bearer Token](#bearer-token)
+   - [Bearer with Form-data](#bearer-with-form-data)  
+   - [Type Class Response Authorize](#type-class-response-authorize)
+   - [No Authentication](#no-authentication)  
+6. [Interceptors](#interceptors)  
+   - [Advanced Example](#advanced-example)  
+7. [HTTP Requests](#http-requests)
+   - [Example of GET/POST/DELETE](#example-of-get-post-delete)  
+8. [Passing Objects as Parameters](#passing-objects-as-parameters)
+9. [More Annotation Usage](#more-annotation-usage)
+10. [License](#license)
 
 ---
 
@@ -35,9 +63,9 @@
 
 ---
 
-## Getting Started
+## Using simple mode
 
-### Using simple mode example
+### Usage Example
 
 If you do not use Spring Boot, simply retrieve the client instance by calling:
 
@@ -56,7 +84,9 @@ public class Main {
 
 ---
 
-### Using with Spring Boot example
+## Using with Spring Boot
+
+### Configuration Example
 
 If your project uses Spring Boot, simply **scan** the framework in your main application class so that annotated interfaces will be detected:
 
@@ -93,15 +123,16 @@ public class MyComponent implements CommandLineRunner {
 
 ## Automatic Authentication
 
-The `@AutoAuthentication` annotation performs automatic authentication, allowing you to configure how the token is obtained and reused. You can control the following settings:
+### Bearer Token
 
+The `@AutoAuthentication` annotation lets you configure how the token is obtained and reused. You can control:
 
 - **autoRecover**: If `true`, the token is stored on disk. If the application restarts, the framework will read the last saved token.  
 - **type**: Authentication type (e.g., `AuthType.BEARER_TOKEN`).  
 - **authenticate**: Details on how to obtain the token (URL, credential class, etc.).  
 - **interception**: Configurations for interceptors to inject headers and manage expiration.
 
-Full example of a default Bearer token JSON
+Complete example with default JSON:
 
 ```java
 @AutoAuthentication(
@@ -120,11 +151,7 @@ Full example of a default Bearer token JSON
         fullUrlAuth = "https://localhost:9095/autorizy",
         
         // Environment variable containing the credentials in JSON format
-        //export MY_CREDENTIAL_ENV="{\"clientId\": \"124\", \"secret\": \"123\",\"grantType\":\"client_credentials\"}"
-        credentialJsonEnvironmentVariable = "MY_CREDENTIAL_ENV", 
-        
-        //Fixed input credentials, but only for local development. Not secure! For testing purposes only!
-        //credentialJsonForTest = "{"client_id": "124", "secret": "123","grant_type":"client_credentials"}", 
+        credentialJsonEnvironmentVariable = "MY_CREDENTIAL_ENV", // "{"clientId": "124", "secret": "123","grantType":"client_credentials"}"
 
         // Class where credentials will be mapped
         typeClassCredential = CredencialDto.class,
@@ -142,7 +169,7 @@ Full example of a default Bearer token JSON
         // Enables the interceptor to automatically inject the Bearer token in requests
         enabled = true,
         // Token expiration time in ms. If `@ExpireDate` is not used in the `typeClassAuthorize`
-        //expireInMilliseconds = 60_000
+        expireInMilliseconds = 60_000
     )
 )
 public interface AutoAuthencatedTestApi {
@@ -150,18 +177,14 @@ public interface AutoAuthencatedTestApi {
 }
 ```
 
-#### Type Class Request Credential
+> **export MY_CREDENTIAL_ENV="{\"clientId\": \"124\", \"secret\": \"123\",\"grantType\":\"client_credentials\"}".**
 
-The Credential class is a data model that mirrors the user credentials provided in the `@AutoAuthentication` annotation. This class serves as a structured representation of authentication details, which are used to obtain an access token from an authentication service.
+---
 
-Annotations and Fields
+### Bearer with Form-data
 
-- **@RestFullField**: For the field with a customized name. Used by `typeClassCredential` and `typeClassAuthorize`.
-- **client_id** `@RestFullField("client_id")`: Represents the client identifier required for authentication.
-- **secret**: Holds the client secret, which is typically used alongside the client ID for secure authentication.
-- **grantType** `@RestFullField("grant_type")`: Defines the type of grant being used in the authentication process (e.g., password, client_credentials).
+- **form-data**: For authentication via form-data, @AdditionalHeader is required. If you have custom fields, use @RestFullField.
 
-This class is primarily used when interacting with authentication endpoints that require structured credential data. The framework will automatically serialize these fields into a request format compatible with the authentication API.
 
 ```java
 public class CredentialDto {
@@ -177,13 +200,37 @@ public class CredentialDto {
     // getters and setters
 }
 ```
+
+```java
+@AutoAuthentication(
+    autoRecover = false,
+    type = AuthType.BEARER_TOKEN,
+    authenticate = @Authentication(
+        enabled = true,
+        fullUrlAuth = "https://api.testing.com/oauth/token",
+        credentialJsonForTest = "{"client_id": "124", "secret": "123","grant_type":"client_credentials"}", 
+        typeClassCredential = CredencialDto.class,
+        typeClassAuthorize = ReponseAuthorizeDto.class,
+        additionalHeaders = {
+            @AdditionalHeader(headerName = "Content-Type", headerValue = "application/x-www-form-urlencoded"),
+            @AdditionalHeader(headerName = "User-Agent", headerValue = "Mozilla/5.0 Chrome/127.0.0.0 Safari/537.36")
+        }
+    ),
+    interception = @Interception(
+        enabled = true,
+        expireInMilliseconds = 60_000,
+        additionalHeaders = {
+            @AdditionalHeader(headerName = "User-Agent", headerValue = "Mozilla/5.0 Chrome/127.0.0.0 Safari/537.36")
+        }
+    )
+)
+public interface AutoAuthFormDataApi {}
+```
 ---
 
-#### Type Class Response Authorize
 
-The ResponseAuthorize class represents the response structure for authentication requests. This class is responsible for handling authorization tokens and their expiration details after a successful authentication request.
 
-Annotations and Fields
+## Type Class Response Authorize
 
 - **@Bearer**: For the field that represents the token in the authorize class (e.g., `private String token;`).  
 - **@ExpireDate**: For the field that represents the token’s expiration date/time (e.g., `private Instant expireTime;`). If this field is not annotated, use `expireInMilliseconds` in `@Interception` to force re-authentication.  
@@ -204,47 +251,26 @@ public class ReponseAuthorizeDto {
 }
 ```
 
----
-
-### Full example of a Bearer with Form-data
-
-Form-Data Authentication: When using form-data for authentication, `@AdditionalHeader` is required. If you have custom fields, use `@RestFullField`.
+For the customized field name:
 
 ```java
-@AutoAuthentication(
-    autoRecover = false,
-    type = AuthType.BEARER_TOKEN,
-    authenticate = @Authentication(
-        enabled = true,
-        fullUrlAuth = "https://api.testing.com/oauth/token",
-        
-        //Fixed input credentials, but only for local development. Not secure! For testing purposes only!
-        credentialJsonForTest = "{"client_id": "124", "secret": "123","grant_type":"client_credentials"}", 
-        
-        typeClassCredential = CredencialDto.class,
-        typeClassAuthorize = ReponseAuthorizeDto.class,
-        additionalHeaders = {
-            @AdditionalHeader(headerName = "Content-Type", headerValue = "application/x-www-form-urlencoded"),
-            @AdditionalHeader(headerName = "User-Agent", headerValue = "Mozilla/5.0 Chrome/127.0.0.0 Safari/537.36")
-        }
-    ),
-    interception = @Interception(
-        enabled = true,
-        expireInMilliseconds = 60_000,
-        additionalHeaders = {
-            @AdditionalHeader(headerName = "User-Agent", headerValue = "Mozilla/5.0 Chrome/127.0.0.0 Safari/537.36")
-        }
-    )
-)
-public interface AutoAuthFormDataApi {}
+public class ReponseAuthorizeDto {
+
+    @Bearer
+    @RestFullField("access_token")
+    private String accessToken;
+
+    @ExpireDate
+    @RestFullField("expires_at")
+    private LocalDateTime expiresAt; // OR private Date expiresAt
+   
+    // getters and setters
+}
 ```
 
 ---
 
-### No Authentication (Fixed Token)
-
-The following example demonstrates how to configure `@AutoAuthentication` with a fixed Bearer token. This approach is useful when using a static authentication token instead of dynamically retrieving one.
-
+### No Authentication
 
 ```java
 @AutoAuthentication(
@@ -252,10 +278,7 @@ The following example demonstrates how to configure `@AutoAuthentication` with a
     type = AuthType.BEARER_TOKEN,
     interception = @Interception(
         enabled = true,
-        
-        //If no expiry date field is present, you can manually define the expiration time.”
         expireInMilliseconds = 60_000,
-        
         additionalHeaders = {
             @AdditionalHeader(headerName = "User-Agent", headerValue = "Mozilla/5.0 Chrome/127.0.0.0 Safari/537.36"),
             @AdditionalHeader(headerName = "Authorization", headerValue = "Bearer YOYR_TOKEN_FIXED_HERE")
@@ -352,7 +375,7 @@ public interface ExampleApi {
 
 ## Passing Objects as Parameters
 
-The framework also allows you to map URL parameters, form-data, or x-www-form-urlencoded directly from objects. It automatically converts DTOs (Data Transfer Objects), POJOs (Plain Old Java Objects), or other structured objects into request parameters.
+The framework also allows you to map URL parameters, form-data, or x-www-form-urlencoded from **objects**. For example, if you have a DTO like this:
 
 ```java
 public class Teste {
