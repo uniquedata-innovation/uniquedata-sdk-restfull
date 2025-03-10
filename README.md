@@ -24,8 +24,8 @@
 
 ```xml
 <dependency>
-  <groupId>br.com.uniquedata-restfull-sdk</groupId>
-  <artifactId>uniquedata-restfull-sdk</artifactId>
+  <groupId>br.com.uniquedata.sdk.restfull.restfull</groupId>
+  <artifactId>uniquedata-sdk-restfull</artifactId>
   <version>0.0.1-BETA.1</version>
 </dependency>
 ```
